@@ -1,7 +1,25 @@
 import { useScrollReveal } from '../hooks/useScrollReveal'
+import { useSiteContent } from '../context/SiteContentContext'
 
 export default function Contact() {
   const ref = useScrollReveal<HTMLElement>()
+  const { siteData } = useSiteContent()
+  const { 
+    telefone_whatsapp, 
+    email_contato, 
+    endereco_rua, 
+    horario_funcionamento, 
+    delivery_link,
+    instagram_link
+  } = siteData.general
+
+  // Formata o número visual do WhatsApp para exibição
+  const formatPhoneVisual = (num: string) => {
+    if (num.length === 13) {
+      return `+55 (${num.substring(4, 6)}) ${num.substring(6, 11)}-${num.substring(11)}`
+    }
+    return num
+  }
 
   return (
     <section className="section" id="contato" ref={ref}>
@@ -15,9 +33,8 @@ export default function Contact() {
             <div className="contact__icon">📍</div>
             <div>
               <div className="contact__label">Endereço</div>
-              <div className="contact__value">
-                Rua Pedro Javaroni, 306
-                <br />Ribeirão Preto — SP, 14051-230
+              <div className="contact__value" style={{ whiteSpace: 'pre-line' }}>
+                {endereco_rua}
               </div>
             </div>
           </div>
@@ -26,9 +43,8 @@ export default function Contact() {
             <div className="contact__icon">🕒</div>
             <div>
               <div className="contact__label">Horário de Funcionamento</div>
-              <div className="contact__value">
-                Segunda a Sábado: 6h às 18h
-                <br />Domingo: Fechado
+              <div className="contact__value" style={{ whiteSpace: 'pre-line' }}>
+                {horario_funcionamento}
               </div>
             </div>
           </div>
@@ -38,8 +54,8 @@ export default function Contact() {
             <div>
               <div className="contact__label">WhatsApp</div>
               <div className="contact__value">
-                <a href="https://api.whatsapp.com/send?phone=5516997427103" target="_blank" rel="noopener noreferrer">
-                  +55 (16) 99742-7103
+                <a href={`https://api.whatsapp.com/send?phone=${telefone_whatsapp}`} target="_blank" rel="noopener noreferrer">
+                  {formatPhoneVisual(telefone_whatsapp)}
                 </a>
               </div>
             </div>
@@ -50,8 +66,8 @@ export default function Contact() {
             <div>
               <div className="contact__label">E-mail (B2B)</div>
               <div className="contact__value">
-                <a href="mailto:b2b@canelacafe.com.br">
-                  b2b@canelacafe.com.br
+                <a href={`mailto:${email_contato}`}>
+                  {email_contato}
                 </a>
               </div>
             </div>
@@ -59,7 +75,7 @@ export default function Contact() {
 
           <div className="contact__actions reveal reveal-delay-4">
             <a
-              href="https://api.whatsapp.com/send?phone=5516997427103&text=Olá! Gostaria de fazer um pedido."
+              href={`https://api.whatsapp.com/send?phone=${telefone_whatsapp}&text=Olá! Gostaria de fazer um pedido.`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn--whatsapp"
@@ -67,7 +83,7 @@ export default function Contact() {
               💬 WhatsApp
             </a>
             <a
-              href="https://www.instagram.com/canelacafe.emporio/"
+              href={instagram_link}
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn--outline"
@@ -75,7 +91,7 @@ export default function Contact() {
               📸 Instagram
             </a>
             <a
-              href="https://g3food.com.br/canelacafe"
+              href={delivery_link}
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn--primary"

@@ -1,43 +1,32 @@
 import { useScrollReveal } from '../hooks/useScrollReveal'
-import cafeGourmetImg from '../assets/images/cafe-gourmet.jpg'
-
-const STEPS = [
-  {
-    icon: '📦',
-    title: 'Escolha seu plano',
-    desc: 'Café em grãos ou moído fresco. Na medida certa para o seu consumo mensal.',
-  },
-  {
-    icon: '☕',
-    title: 'Curadoria do Barista',
-    desc: 'Receba os melhores microlotes da Alta Mogiana selecionados por nossos especialistas.',
-  },
-  {
-    icon: '🎁',
-    title: 'Surpresas e Brindes',
-    desc: 'Todo mês uma experiência sensorial nova com amostras e brindes exclusivos.',
-  },
-  {
-    icon: '⭐',
-    title: 'Vantagens VIP',
-    desc: 'Assinantes ganham 10% OFF em todas as compras na loja física e online.',
-  },
-]
+import { useSiteContent } from '../context/SiteContentContext'
 
 export default function Assinatura() {
   const ref = useScrollReveal<HTMLElement>()
+  const { siteData } = useSiteContent()
+  const {
+    eyebrow,
+    title,
+    description,
+    offer_eyebrow,
+    offer_title,
+    offer_desc,
+    offer_btn_label,
+    offer_image,
+    steps
+  } = siteData.assinatura
+  const { telefone_whatsapp } = siteData.general
 
   return (
     <section className="section" id="assinatura" ref={ref}>
       <div className="section__inner">
         
         <div className="text-center" style={{ marginBottom: 'var(--space-3xl)' }}>
-          <span className="eyebrow reveal">Clube de Assinatura</span>
-          <h2 className="reveal reveal-delay-1">Como funciona o Clube Canela?</h2>
+          <span className="eyebrow reveal">{eyebrow}</span>
+          <h2 className="reveal reveal-delay-1">{title}</h2>
           <div className="divider divider--center reveal reveal-delay-2" />
-          <p className="reveal reveal-delay-2" style={{ margin: '0 auto', maxWidth: '700px' }}>
-            Não fique sem seu café especial. Assine nosso clube e receba mensalmente 
-            no conforto da sua casa os melhores grãos com torra fresca.
+          <p className="reveal reveal-delay-2" style={{ margin: '0 auto', maxWidth: '700px', whiteSpace: 'pre-line' }}>
+            {description}
           </p>
         </div>
 
@@ -47,7 +36,7 @@ export default function Assinatura() {
           gap: 'var(--space-xl)',
           marginBottom: 'var(--space-4xl)'
         }}>
-          {STEPS.map((step, i) => (
+          {steps.map((step, i) => (
             <div key={i} style={{ textAlign: 'center' }}>
               <div style={{ 
                 fontSize: '2.5rem', 
@@ -79,24 +68,24 @@ export default function Assinatura() {
           alignItems: 'center'
         }}>
           <div style={{ padding: 'var(--space-2xl) var(--space-xl)' }}>
-            <span className="eyebrow" style={{ color: 'var(--tan)' }}>Oferta Especial</span>
+            <span className="eyebrow" style={{ color: 'var(--tan)' }}>{offer_eyebrow}</span>
             <h3 style={{ color: 'var(--cream)', fontSize: '2rem', marginBottom: 'var(--space-md)' }}>
-              Garanta seu café para o mês inteiro
+              {offer_title}
             </h3>
             <p style={{ color: 'var(--tan)', marginBottom: 'var(--space-xl)' }}>
-              Planos a partir de R$ 49,90 por mês com entrega grátis em Ribeirão Preto.
+              {offer_desc}
             </p>
             <a 
-              href="https://api.whatsapp.com/send?phone=5516997427103&text=Olá! Quero saber mais sobre a Assinatura Canela Café." 
+              href={`https://api.whatsapp.com/send?phone=${telefone_whatsapp}&text=Olá! Quero saber mais sobre a Assinatura Canela Café.`} 
               target="_blank" 
               rel="noopener noreferrer" 
               className="btn btn--primary"
             >
-              Assinar Agora
+              {offer_btn_label}
             </a>
           </div>
           <div style={{ height: '100%', minHeight: '300px' }}>
-            <img src={cafeGourmetImg} alt="Café Especial Canela" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src={offer_image} alt="Café Especial Canela" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
         </div>
 

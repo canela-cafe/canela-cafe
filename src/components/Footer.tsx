@@ -1,8 +1,26 @@
 import { Link } from 'react-router-dom'
 import { IconInstagram, IconFacebook, IconWhatsapp } from '../icons'
+import { useSiteContent } from '../context/SiteContentContext'
 
 export default function Footer() {
   const year = new Date().getFullYear()
+  const { siteData } = useSiteContent()
+  const { 
+    telefone_whatsapp, 
+    email_contato, 
+    endereco_rua, 
+    horario_funcionamento, 
+    delivery_link,
+    instagram_link,
+    facebook_link
+  } = siteData.general
+
+  const formatPhoneVisual = (num: string) => {
+    if (num.length === 13) {
+      return `(${num.substring(4, 6)}) ${num.substring(6, 11)}-${num.substring(11)}`
+    }
+    return num
+  }
 
   return (
     <footer className="footer">
@@ -11,7 +29,7 @@ export default function Footer() {
           <div className="footer__brand">
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
               <img
-                src="./logo.png"
+                src={siteData.hero.logo_image}
                 alt="Canela Café"
                 style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover' }}
               />
@@ -21,7 +39,7 @@ export default function Footer() {
                 fontWeight: 700,
                 color: 'var(--cream)',
               }}>
-                Canela Café
+                {siteData.hero.title}
               </span>
             </div>
             <p>
@@ -31,7 +49,7 @@ export default function Footer() {
 
             <div className="footer__socials">
               <a
-                href="https://www.instagram.com/canelacafe.emporio/"
+                href={instagram_link}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer__social"
@@ -40,7 +58,7 @@ export default function Footer() {
                 <IconInstagram size={20} />
               </a>
               <a
-                href="https://www.facebook.com/"
+                href={facebook_link}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer__social"
@@ -49,7 +67,7 @@ export default function Footer() {
                 <IconFacebook size={20} />
               </a>
               <a
-                href="https://api.whatsapp.com/send?phone=5516997427103"
+                href={`https://api.whatsapp.com/send?phone=${telefone_whatsapp}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer__social"
@@ -69,37 +87,35 @@ export default function Footer() {
               <Link to="/loja">Loja</Link>
               <Link to="/b2b">Para Empresas</Link>
               <Link to="/contato">Contato</Link>
+              <Link to="/admin" style={{ opacity: 0.5, fontSize: '0.8rem' }}>Painel Admin</Link>
             </div>
           </div>
 
           <div>
             <h4 className="footer__title">Contato</h4>
             <div className="footer__links">
-              <a href="https://api.whatsapp.com/send?phone=5516997427103" target="_blank" rel="noopener noreferrer">
-                (16) 99742-7103
+              <a href={`https://api.whatsapp.com/send?phone=${telefone_whatsapp}`} target="_blank" rel="noopener noreferrer">
+                {formatPhoneVisual(telefone_whatsapp)}
               </a>
-              <a href="mailto:b2b@canelacafe.com.br">
-                b2b@canelacafe.com.br
+              <a href={`mailto:${email_contato}`}>
+                {email_contato}
               </a>
-              <a href="https://g3food.com.br/canelacafe" target="_blank" rel="noopener noreferrer">
+              <a href={delivery_link} target="_blank" rel="noopener noreferrer">
                 Delivery (G3Food)
-              </a>
-              <a href="https://linktr.ee/canelacafeemporio" target="_blank" rel="noopener noreferrer">
-                Linktree
               </a>
             </div>
             <div style={{ marginTop: '16px' }}>
               <h4 className="footer__title">Horário</h4>
               <div className="footer__links">
-                <span style={{ opacity: 0.7, fontSize: '0.85rem' }}>Seg–Sáb: 6h às 18h</span>
+                <span style={{ opacity: 0.7, fontSize: '0.85rem' }}>{horario_funcionamento}</span>
               </div>
             </div>
           </div>
         </div>
 
         <div className="footer__bottom">
-          <span>© {year} Canela Café Empório e Cafeteria. Todos os direitos reservados.</span>
-          <span>Rua Pedro Javaroni, 306 — Ribeirão Preto, SP</span>
+          <span>© {year} {siteData.hero.title} Empório e Cafeteria. Todos os direitos reservados.</span>
+          <span style={{ whiteSpace: 'pre-line' }}>{endereco_rua}</span>
         </div>
       </div>
     </footer>

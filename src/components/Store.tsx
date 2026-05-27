@@ -1,37 +1,11 @@
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { motion } from 'framer-motion'
-import cafeEspecialImg from '../assets/images/cafe-especial.jpg'
-import destaqueImg from '../assets/images/destaque1.jpg'
-import cafeGourmetImg from '../assets/images/cafe-gourmet.jpg'
-
-const PRODUCTS = [
-  {
-    title: 'Café Especial Catuai 62',
-    price: 'R$ 37,00',
-    weight: '250g',
-    image: cafeEspecialImg,
-    badge: 'Mais Vendido',
-    description: '82 pontos · Notas de chocolate e caramelo',
-  },
-  {
-    title: 'Café Gourmet Alta Mogiana',
-    price: 'R$ 54,00',
-    weight: '500g',
-    image: cafeGourmetImg,
-    badge: 'Premium',
-    description: '84 pontos · Torra média, mais cremoso',
-  },
-  {
-    title: 'Kit Café + Prensa Francesa',
-    price: 'R$ 129,90',
-    weight: 'Kit',
-    image: destaqueImg,
-    description: 'O presente perfeito para quem ama café',
-  },
-]
+import { useSiteContent } from '../context/SiteContentContext'
 
 export default function Store() {
   const ref = useScrollReveal<HTMLElement>()
+  const { storeItems, siteData } = useSiteContent()
+  const { telefone_whatsapp } = siteData.general
 
   return (
     <section className="section section--dark grain" id="loja" ref={ref}>
@@ -49,10 +23,10 @@ export default function Store() {
         </div>
 
         <div className="store__grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 340px))', justifyContent: 'center' }}>
-          {PRODUCTS.map((product, i) => (
+          {storeItems.map((product, i) => (
             <motion.div
-              key={product.title}
-              className={`store__card reveal reveal-delay-${i + 1}`}
+              key={product.id || product.title}
+              className={`store__card reveal reveal-delay-${(i % 3) + 1}`}
               whileHover={{ y: -8, scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
@@ -69,9 +43,11 @@ export default function Store() {
                   <span className="store__card-badge">{product.badge}</span>
                 )}
                 <h4 className="store__card-title">{product.title}</h4>
-                <p className="menu__card-desc" style={{ color: 'rgba(196,180,154,0.7)', fontSize: '0.8rem', marginBottom: '8px' }}>
-                  {product.description}
-                </p>
+                {product.description && (
+                  <p className="menu__card-desc" style={{ color: 'rgba(196,180,154,0.7)', fontSize: '0.8rem', marginBottom: '8px' }}>
+                    {product.description}
+                  </p>
+                )}
                 <div className="store__card-price">
                   {product.price}
                   <span style={{ fontSize: '0.75rem', fontWeight: 400, marginLeft: '6px', opacity: 0.6 }}>
@@ -85,7 +61,7 @@ export default function Store() {
 
         <div className="store__cta reveal">
           <a
-            href="https://api.whatsapp.com/send?phone=5516997427103&text=Olá! Gostaria de comprar café especial."
+            href={`https://api.whatsapp.com/send?phone=${telefone_whatsapp}&text=Olá! Gostaria de comprar café especial.`}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn--light"
